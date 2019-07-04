@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>Sign in &laquo; Admin</title>
+  <link rel="stylesheet" href="../assets/vendors/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+  <div class="login">
+    <div class="login-wrap">
+      <img class="avatar" src="../assets/img/default.png">
+      <!-- 有错误信息时展示 -->
+      <!-- <div class="alert alert-danger">
+        <strong>错误！</strong> 用户名或密码错误！
+      </div> -->
+      <div class="form-group">
+        <label for="email" class="sr-only">邮箱</label>
+        <input id="email" type="email" class="form-control" placeholder="邮箱" autofocus>
+      </div>
+      <div class="form-group">
+        <label for="password" class="sr-only">密码</label>
+        <input id="password" type="password" class="form-control" placeholder="密码">
+      </div>
+      <button class="btn btn-primary btn-block" id="loginBtn">登 录</button>
+    </div>
+  </div>
+  <script src="../assets/vendors/jquery/jquery.min.js"></script>
+  <script>
+    // 1.做的事情是什么，从用户角度去看，用代码实现出来（中文描述出来）
+    // 2.写一行打印一行（看变量的值有没有拿到）
+    // 调错的问题
+    // 1. 控制台打开看一下有没有出错（红色的）
+    // 2. 看network  
+    // + get请求参数时，刷新一下看请求地址后面的参数是不是自己想要的
+    // + post请求参数时，看点开formdata里面
+    // + 二分法  （删一半测试一半，看出错的地方在哪）
+    $('#loginBtn').on('click', function() {
+      var email = $('#email').val();
+      var password = $('#password').val();
+      // console.log(email, password);
+      // 校验合法性，如果不合法就阻止代码往下执行
+      if(email.trim() == '') {
+        alert('邮箱不能为空');
+        return;
+      }
+      if(password.trim() == '') {
+        alert('密码不能为空');
+        return;
+      }
+      $.ajax({
+        type:'post',//get或post
+        url:'/login',//请求的地址
+        data:{
+          email: email,
+          password: password
+        },//如果不需要传，则注释掉 请求的参数，a=1&b=2或{a:1,b:2}或者jq中的serialize方法，或者formData收集
+        dataType:'json',
+        success: function(result){//成功的回调函数
+          // console.log(result);
+          // 下面三种写法都是一样的
+          location.href = 'index.html';
+          // location.href = './index.html';
+          // location.href = '/admin/index.html';
+        },
+        error: function(err) {
+          // console.log(err);
+          alert('邮箱或密码错误')
+        } 
+      })
+    })
+  </script>
+</body>
+</html>
